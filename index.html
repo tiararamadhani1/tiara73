@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scientific Number Checker</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #ffc0cb; /* Warna latar pink */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            width: 400px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        input, button {
+            margin: 10px;
+            padding: 10px;
+            width: 80%;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .message {
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        .valid {
+            color: green;
+        }
+        .invalid {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Scientific Number Checker</h2>
+        <nav>
+            <button onclick="saveFile()">Save</button>
+            <button onclick="saveAsFile()">Save As</button>
+            <button onclick="copyText()">Copy</button>
+            <button onclick="pasteText()">Paste</button>
+            <button onclick="checkNumber()">Run</button>
+            <button onclick="showAboutUs()">About Us</button>
+        </nav>
+        <input type="text" id="numberInput" placeholder="Enter a number...">
+        <button onclick="checkNumber()">Check</button>
+        <p id="message" class="message"></p>
+    </div>
+    <script>
+        function checkNumber() {
+            const input = document.getElementById('numberInput').value.trim();
+            const regex = /^[+-]?\d+(\.\d+)?([eE][+-]?\d+)?$/;
+            const messageEl = document.getElementById('message');
+            
+            if (regex.test(input)) {
+                messageEl.textContent = "✅ Yes, it is a number";
+                messageEl.className = "message valid";
+            } else {
+                messageEl.textContent = "❌ No, it is not a number";
+                messageEl.className = "message invalid";
+            }
+        }
+
+        async function copyText() {
+            const input = document.getElementById('numberInput');
+            try {
+                await navigator.clipboard.writeText(input.value);
+                alert("Copied to clipboard!");
+            } catch (err) {
+                alert("Failed to copy!");
+            }
+        }
+
+        function pasteText() {
+            navigator.clipboard.readText().then(text => {
+                document.getElementById('numberInput').value = text;
+            });
+        }
+
+        function saveFile() {
+            const blob = new Blob([document.getElementById('numberInput').value], { type: 'text/plain' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'number.txt';
+            link.click();
+        }
+
+        function saveAsFile() {
+            const fileName = prompt("Enter file name:", "number.txt");
+            if (fileName) {
+                const blob = new Blob([document.getElementById('numberInput').value], { type: 'text/plain' });
+                const link = document.createElement('a');
+                link.href = URL.createObjectURL(blob);
+                link.download = fileName;
+                link.click();
+            }
+        }
+
+        function showAboutUs() {
+            alert("Nama: Mutiara Ramadhani\nNIM: 231011060073\nKelas: OtoMataC\nProdi: Sistem Informasi");
+        }
+    </script>
+</body>
+</html>
